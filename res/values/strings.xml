@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AndroidPro4</string>
+    <string name="action_settings">haah</string>
+    <string name="btnR">start</string>
+    <string name="btnS">stop</string>
+    <string name="btnE">exit</string>
+    <string name="textV">vlounm</string>
+
+</resources>

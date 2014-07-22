@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AndroidPro4</string>
+    <string name="app_name">蓝牙录放回还</string>
     <string name="action_settings">haah</string>
     <string name="btnR">start</string>
     <string name="btnS">stop</string>

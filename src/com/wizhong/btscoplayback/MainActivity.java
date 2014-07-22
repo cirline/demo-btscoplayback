@@ -1,18 +1,20 @@
 package com.wizhong.btscoplayback;  
-  
-import com.example.androidpro4.R;
 
-import android.app.Activity;  
-import android.media.AudioFormat;  
-import android.media.AudioManager;  
-import android.media.AudioRecord;  
-import android.media.AudioTrack;  
-import android.media.MediaRecorder;  
-import android.os.Bundle;  
-import android.view.View;  
-import android.widget.Button;  
-import android.widget.SeekBar;  
-import android.widget.Toast;  
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothProfile;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.AudioTrack;
+import android.media.MediaRecorder;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.Toast;
   
 public class MainActivity extends Activity {  
     /** Called when the activity is first created. */  
@@ -25,12 +27,11 @@ public class MainActivity extends Activity {
     int recBufSize,playBufSize;  
     AudioRecord audioRecord;  
     AudioTrack audioTrack;  
-  
     @Override  
     public void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
         setContentView(R.layout.activity_main);  
-        setTitle("蓝牙录放回还");  
+        setTitle("蓝牙录放回还"); 
         recBufSize = AudioRecord.getMinBufferSize(frequency,  
         		 AudioFormat.CHANNEL_IN_MONO, audioEncoding);  
   
@@ -74,7 +75,7 @@ public class MainActivity extends Activity {
             }  
         });  
     }  
-  
+    
     @Override  
     protected void onDestroy() {  
         super.onDestroy();  

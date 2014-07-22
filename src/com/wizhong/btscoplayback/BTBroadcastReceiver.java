@@ -4,43 +4,43 @@ import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.util.Log;
-import android.widget.CheckBox;
 import android.widget.Toast;
 
 public class BTBroadcastReceiver extends BroadcastReceiver {
 	static final String LOG_TAG = "BTBroadcastReceiver";
 	static final boolean DEBUG = true;
 	static Context mContext = null;
+	private int mBluetoothHeadsetState = 0;
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		mContext = context;
-		// Log.e(LOG_TAG, "BT connect changed!");
+		Log.e(LOG_TAG, "BT connect changed!");
 		
 		if(intent.getAction().equals(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED)) {
 			handleScoChange(context, intent);
+		} else if(intent.getAction().equals(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED)) {
+			mBluetoothHeadsetState = intent.getIntExtra(BluetoothHeadset.EXTRA_STATE,
+                    BluetoothHeadset.STATE_DISCONNECTED);
+			Log.d(LOG_TAG, "==> new state: " + mBluetoothHeadsetState);
+			updateBluetoothIndication(true);  // Also update any visible UI if necessary
 		}
-		else if (intent.getAction().equals(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED)) {
-			// 判断连接还是断开
-			int state = intent.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE,
-					0);
-		
-			init();
-			
-			if (state == BluetoothAdapter.STATE_CONNECTED) {
-				// 连接处理
-				Log.i(LOG_TAG, "STATE:" + "STATE_CONNECTED");
-				connect();
-			}
-			else {
-				// 　断开处理
-				Log.i(LOG_TAG, "STATE:" + "STATE_DISCONNECTED");			
-				//disconnect();
-			}
+	}
+	
+	public void updateBluetoothIndication(boolean it) {
+		if (mBluetoothHeadsetState == BluetoothProfile.STATE_CONNECTED) {
+			Log.i(LOG_TAG, "BluetoothProfile.STATE_CONNECTED");
+			connect();
+		} else if (mBluetoothHeadsetState == BluetoothProfile.STATE_DISCONNECTED) {
+			Log.i(LOG_TAG, "BluetoothProfile.STATE_DISCONNECTED");
+			disconnect();
 		}
 	}
 	
@@ -63,6 +63,8 @@ public class BTBroadcastReceiver extends BroadcastReceiver {
 	private AudioManager mAudioManager = null;
 
 	private void disconnect() {
+		init();
+		
         if(DEBUG)
             Log.e(LOG_TAG, "BTSCOApp Checkbox Unchecked ");
          mAudioManager.setBluetoothScoOn(false);
@@ -126,11 +128,12 @@ public class BTBroadcastReceiver extends BroadcastReceiver {
 	}
 	
 	private void connect() {
+		init();
+		
 		// 匹配名字
 		if (DEBUG)
 			Log.e(LOG_TAG, "BTSCOApp: Checkbox Checked ");
 		if (mAudioManager != null) {
-			
 			mAudioManager.setBluetoothScoOn(true);
 			mAudioManager.startBluetoothSco();
 			// OMAP4 has dedicated support for MM playback on BT SCO
@@ -140,6 +143,8 @@ public class BTBroadcastReceiver extends BroadcastReceiver {
 			// For other platform or omap3, the user
 			// needs to play mono 8k sample using aplay on shell
 		}
+		
+		//MainActivity.updateRecordingState();
 		
 	}
 

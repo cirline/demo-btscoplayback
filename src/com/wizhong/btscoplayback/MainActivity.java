@@ -87,13 +87,13 @@ public class MainActivity extends Activity {
         @Override  
         public void onClick(View v) {  
             if (v == btnRecord) {  
-                isRecording = true;  
-                new RecordPlayThread().start();// 开一条线程边录边放  
+                //isRecording = true;  
+                //new RecordPlayThread().start();// 开一条线程边录边放  
             } else if (v == btnStop) {  
-                isRecording = false;  
+                //isRecording = false;  
             } else if (v == btnExit) {  
-                isRecording = false;  
-                MainActivity.this.finish();  
+                //isRecording = false;  
+                //MainActivity.this.finish();  
             }  
         }  
     }  

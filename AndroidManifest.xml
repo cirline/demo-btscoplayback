@@ -23,20 +23,23 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="com.wizhong.btscoplayback.BTBroadcastReceiver">
+        <receiver android:name="com.wizhong.btscoplayback.BTBroadcastReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.DATE_CHANGED" >
-                </action>
-                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED"/>
-                <action android:name="android.media.ACTION_SCO_AUDIO_STATE_UPDATED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.media.ACTION_SCO_AUDIO_STATE_UPDATED" />
             </intent-filter>
         </receiver>
+        
+        <service android:name=".BtService" />
+        
     </application>
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
 </manifest>

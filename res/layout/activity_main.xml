@@ -25,17 +25,25 @@
         android:text="@string/btnE" >
     </Button>
 
-    <TextView
+<!--     <TextView
         android:id="@+id/TextView01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/textV" >
+    </TextView> -->
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/attention" >
     </TextView>
 
-    <SeekBar
+    <!--
+         <SeekBar
         android:id="@+id/skbVolume"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </SeekBar>
+    -->
 
 </LinearLayout>

@@ -1,18 +1,28 @@
 package com.wizhong.btscoplayback;  
   
-import com.example.androidpro4.R;
+import java.util.Set;
 
-import android.app.Activity;  
-import android.media.AudioFormat;  
-import android.media.AudioManager;  
-import android.media.AudioRecord;  
-import android.media.AudioTrack;  
-import android.media.MediaRecorder;  
-import android.os.Bundle;  
-import android.view.View;  
-import android.widget.Button;  
-import android.widget.SeekBar;  
-import android.widget.Toast;  
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHeadset;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioRecord;
+import android.media.AudioTrack;
+import android.media.MediaRecorder;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.Toast;
+
+import com.example.androidpro4.R;
   
 public class MainActivity extends Activity {  
     /** Called when the activity is first created. */  
@@ -25,6 +35,9 @@ public class MainActivity extends Activity {
     int recBufSize,playBufSize;  
     AudioRecord audioRecord;  
     AudioTrack audioTrack;  
+    
+    boolean isScoConnect;
+    final String LOG_TAG = "BtSco";
   
     @Override  
     public void onCreate(Bundle savedInstanceState) {  
@@ -73,8 +86,55 @@ public class MainActivity extends Activity {
                 // TODO Auto-generated method stub  
             }  
         });  
-    }  
-  
+        
+        
+        IntentFilter counterActionFilter = new IntentFilter(BluetoothHeadset.ACTION_CONNECTION_STATE_CHANGED);
+        registerReceiver(scoActionReceiver, counterActionFilter);
+        
+    }
+    
+    private BroadcastReceiver scoActionReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.i("onReceive", "Ha");
+			int state = intent.getIntExtra(BluetoothHeadset.EXTRA_STATE,
+					0);
+			if (state == BluetoothHeadset.STATE_CONNECTED) {
+				Log.i("onReceive", "BluetoothHeadset.STATE_CONNECTED");
+				isScoConnect = true;
+			} else if (state == BluetoothHeadset.STATE_DISCONNECTING) {
+				Log.i("onReceive", "BluetoothHeadset.STATE_CONNECTED");
+				isScoConnect = false;
+			}
+		}
+    	
+    };
+    
+    private boolean getScoState() {
+    	return isScoConnect;
+    }
+    
+    private AudioManager mAudioManager = null;
+    private Context mContext = this;
+    
+    private boolean startSco() {
+    	
+    	if(!getScoState())
+    		return false;
+    	
+    	
+    	mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+		if (mAudioManager != null) {
+
+			mAudioManager.setBluetoothScoOn(true);
+			mAudioManager.startBluetoothSco();
+			return true;
+		}
+		
+		return false;
+    }
+    
     @Override  
     protected void onDestroy() {  
         super.onDestroy();  
@@ -85,9 +145,16 @@ public class MainActivity extends Activity {
   
         @Override  
         public void onClick(View v) {  
-            if (v == btnRecord) {  
+            if (v == btnRecord) { 
+            	if(!startSco()) {
+            		Toast.makeText(mContext,"       开启Sco失败!\n" +
+            								"蓝牙设备未连接或者不支持SCO通话.", Toast.LENGTH_LONG).show();  
+            		return ;
+            	}
+            	
                 isRecording = true;  
                 new RecordPlayThread().start();// 开一条线程边录边放  
+                
             } else if (v == btnStop) {  
                 isRecording = false;  
             } else if (v == btnExit) {  

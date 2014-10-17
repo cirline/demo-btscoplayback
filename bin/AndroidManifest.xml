@@ -26,10 +26,8 @@
         <receiver
             android:name="com.wizhong.btscoplayback.BTBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.DATE_CHANGED" >
-                </action>
-                <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
-                <action android:name="android.media.ACTION_SCO_AUDIO_STATE_UPDATED"/>
+                <action android:name="android.bluetooth.headset.profile.action.CONNECTION_STATE_CHANGED" />
+                <action android:name="android.media.ACTION_SCO_AUDIO_STATE_UPDATED"/> 
             </intent-filter>
         </receiver>
     </application>

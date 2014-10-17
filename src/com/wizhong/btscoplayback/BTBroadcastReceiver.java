@@ -1,24 +1,16 @@
 package com.wizhong.btscoplayback;
 
-import java.util.Set;
-
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.util.Log;
-import android.widget.CheckBox;
-import android.widget.Toast;
 
 public class BTBroadcastReceiver extends BroadcastReceiver {
 	static final String LOG_TAG = "BTBroadcastReceiver";
 	static final boolean DEBUG = true;
 	static Context mContext = null;
 	static boolean isScoConnect;
-    private AudioManager mAudioManager = null;
     
 	@Override
 	public void onReceive(Context context, Intent intent) {
